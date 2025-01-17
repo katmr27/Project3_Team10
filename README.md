@@ -1,6 +1,6 @@
 # Project3_Team10
 Project 3 Module 16 
-Project Outline - Finding Best Family Hiking Trail - Columbia River Gorge
+Project Outline - Finding The Best Family Hiking Trail - Columbia River Gorge
 
 • Project ideation
 	• What trails in the Columbia River Gorge the best suited for families and pets?
@@ -22,4 +22,4 @@ Project Outline - Finding Best Family Hiking Trail - Columbia River Gorge
 • Creating documentation
 	• Shared by Team
 • Creating the presentation
-Shared by Team![image](https://github.com/user-attachments/assets/7f3bf62c-cdcf-488a-a9a7-28d9a3e2bd07)
+	• Shared by Team
