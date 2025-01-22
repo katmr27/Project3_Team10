@@ -1,0 +1,361 @@
+/* styles.css */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --background-color: #f5f6fa;
+    --text-color: #2c3e50;
+    --card-background: #ffffff;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --card-hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --card-border-radius: 8px;
+    --card-spacing: 1.5rem;
+}
+
+/* Navigation bar container */
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+/* Main title styling */
+.logo {
+    color: black;
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 0 0 1rem 0;
+}
+/* Subtitle styling */
+.subtitle {
+    color: black;
+    font-size: 1.5rem;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    font-weight: normal;
+}
+/* Navigation links container */
+.nav-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 2rem;
+}
+/* Individual navigation links */
+.nav-links li a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+.nav-links li a:hover {
+    color: #087e36;
+}
+/* Responsive design                                         This makes the code look good on small, large or other device windows */
+@media (max-width: 768px) {
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas: 
+        "map map"          /* First row */
+        "basic trend"      /* Second row */
+        "interactive interactive";  /* Third row */
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Assign areas to cards */
+.map-card {
+    grid-area: map;
+}
+
+.card:nth-of-type(1) {
+    grid-area: basic;
+}
+
+.card:nth-of-type(2) {
+    grid-area: trend;
+}
+
+.card-interactive {
+    grid-area: interactive;
+}
+
+/* Basic Card Styles */
+.card {
+    background-color: var(--card-background);
+    border-radius: var(--card-border-radius);
+    padding: var(--card-spacing);
+    box-shadow: var(--card-shadow);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.card-content {
+    padding-top: 1rem;
+}
+
+/* Card with Accent Header */
+.card-accent .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.card-badge {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+/* Interactive Card */
+.card-interactive {
+    cursor: pointer;
+}
+
+.card-interactive:hover {
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-2px);
+}
+
+.card-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.card-button:hover {
+    background-color: var(--secondary-color);
+}
+
+.card-button.secondary {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.card-button.secondary:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+/* Card Loading State */
+.card-loading .card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--background-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Chart Container */
+.chart-container {
+    height: 200px;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: var(--card-spacing);
+    }
+    
+    .card-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+        margin-right: 0;
+    }
+}
+
+/* Map Card */
+.map-card {
+    background-color: var(--card-background);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--card-shadow);
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 1rem;
+    background-color: white;
+    color: rgb(215, 29, 221);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.map-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    background-color: white;
+    border: none;
+    border-radius: 4px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.control-btn:hover {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.map-container {
+    height: 500px;
+    width: 100%;
+    background-color: #f0f0f0; /* Placeholder color */
+    position: relative;
+}
+
+.map-legend {
+    padding: 1rem;
+    background-color: white;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.legend-color.easy {
+    background-color: #4CAF50;
+}
+
+.legend-color.moderate {
+    background-color: #FFA726;
+}
+
+.legend-color.difficult {
+    background-color: #E53935;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .map-container {
+        height: 300px; /* Smaller height on mobile */
+    }
+
+    .map-legend {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* Ensure the map container is visible while loading */
+.map-container::after {
+    content: "Loading map...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    color: #666;
+}
+
+
+
+
+
+
+/* back to top button */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(173, 173, 173);
+    color: rgb(0, 0, 0);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: none;  /* Hidden by default */
+    font-size: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.back-to-top:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+.back-to-top.visible {
+    display: block;
+}
