@@ -1,0 +1,102 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis Dashboard</title>       <!-- I can come through and change headders and whatnot as we get a better idea of whats going in here -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav-bar">
+            <h1 class="logo">Finding the Best Family Hiking Trail</h1>
+            <h3 class="subtitle">In The Columbia River Gorge</h3>
+            <ul class="nav-links">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#trailMap">Map</a></li>
+                <li><a href="#trend-chart">Trend Chart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <section id="dashboard" class="dashboard-section">
+            <h2>Dashboard Overview</h2>
+            <div class="dashboard-grid">
+                <!-- Basic Card -->
+                <div class="card">
+                    <h3>Basic Statistics</h3>
+                    <div class="card-content">
+                        <p>Random Statistic: <span id="total-records">0</span></p>
+                        <p>Average Statistic: <span id="avg-value">0</span></p>
+                    </div>
+                </div>
+
+                <!-- Card with Header Accent -->
+                <div class="card card-accent">
+                    <div class="card-header">
+                        <h3>Trending Data</h3>
+                        <span class="card-badge">Live</span>                            <!-- like this live badge but we don't need it -->
+                    </div>
+                    <div class="card-content">
+                        <div id="trend-chart" class="chart-container">
+                            <!-- Chart will be inserted here -->
+                             <h4>Chart will be inserted here</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Card  Currently has buttons but can change to a pandas chart-->
+                <div class="card card-interactive">
+                    <h3>Interactive Graph</h3>
+                    <div class="card-content">
+                        <button class="action-btn">Action 1</button>
+                        <button class="action-btn">Action 2</button>
+                        <button class="action-btn">Action 3</button>
+                    </div>
+                </div>
+                <!-- Interactive Geomap -->
+                <div class="card map-card">
+                    <div class="card-header">
+                        <h3>Columbia River Gorge Trail Map</h3>
+                        <div class="map-controls">
+                            <button class="control-btn" id="zoomIn">+</button>
+                            <button class="control-btn" id="zoomOut">-</button>
+                            <button class="control-btn" id="resetView">Reset</button>
+                        </div>
+                    </div>
+                    <div class="map-container" id="trailMap">
+                        <!-- Map will be inserted here by JavaScript -->
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color easy"></span>
+                            <span>Easy Trails</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color moderate"></span>
+                            <span>Moderate Trails</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color difficult"></span>
+                            <span>Difficult Trails</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rest of the sections remain the same -->
+        
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Data Analysis Dashboard</p>
+    </footer>
+
+    <script src="your-script.js"></script>
+
+<button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
+</body>
+</html>
