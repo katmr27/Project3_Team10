@@ -39,8 +39,8 @@ Horsetail Falls Loop Hike,loop,2.6,395.0,565.0,Easy,"All year, except during win
 Indian Creek Hike,out-and-back,3.2,480.0,250.0,Easy,All year,Yes,No,No
 Klickitat Canyon Hike,out-and-back,6.8,645.0,100.0,Easy,All year,Yes,No,No
 Klickitat Trail: Klickitat Mineral Springs Hike,out-and-back,5.2,545.0,50.0,Easy,All year,Yes,No,No
-Klickitat Trail: Lyle to Klickitat Hike,out-and-back,,465.0,340.0,Moderate,All year,Yes,No,No
-Klickitat Trail: Swale Canyon Hike,out-and-back,,1560.0,1010.0,Moderate,Fall through spring (closed in summer),Yes,No,No
+Klickitat Trail: Lyle to Klickitat Hike,point-to-point,,465.0,340.0,Moderate,All year,Yes,No,No
+Klickitat Trail: Swale Canyon Hike,point-to-point,,1560.0,1010.0,Moderate,Fall through spring (closed in summer),Yes,No,No
 Labyrinth Hike,out-and-back,3.6,1005.0,915.0,Easy,All year,Yes,No,Yes
 Labyrinth-Coyote Wall Loop Hike,loop,7.3,1655.0,1790.0,Moderate,All year,"Yes, for older kids",No,Yes
 Larch Mountain Crater Loop Hike,loop,6.3,4055.0,1310.0,Moderate,May - November,Yes,No,No
@@ -52,10 +52,10 @@ Maryhill Loops Hike,loop,5.9,1560.0,820.0,Moderate,Year round,Yes,No,No
 McCall Point Hike,out-and-back,3.4,1722.0,1070.0,Moderate,March 1st to October 31st (closed in the wet season to prevent erosion),"Yes, for older kids",No,Yes
 Memaloose Hills Hike,out-and-back,3.2,957.0,550.0,Easy,All year,Yes,No,No
 Mosier Plateau Hike,out-and-back,3.5,620.0,760.0,Easy,All year,Yes,No,Yes
-Mosier Twin Tunnels Hike,out-and-back,8.5,530.0,1000.0,Moderate,Year round,Yes,No,Yes
+Mosier Twin Tunnels Hike,point-to-point,8.5,530.0,1000.0,Moderate,Year round,Yes,No,Yes
 Mount Defiance from Wahtum Lake Road Hike,out-and-back,3.2,4959.0,1145.0,Easy,May-Nov,Yes,No,No
 Mud Lake Hike,out-and-back,7.4,4480.0,1400.0,Moderate,Summer into Fall,Yes,es,No
-Multnomah Falls Hike,out-and-back,,895.0,870.0,Moderate,Year-round,Yes,No,Very
+Multnomah Falls Hike,,,895.0,870.0,Moderate,Year-round,Yes,No,Very
 Multnomah-Wahkeena Loop Hike,loop,4.9,1560.0,1600.0,Moderate,Year round (occasional snow/ice in winter),Yes,No,Yes
 Nellie Corser Loop Hike,loop,0.8,1215.0,275.0,Easy,Spring through fall,Yes,No,No
 Nick Eaton Falls Hike,out-and-back,4.2,1020.0,970.0,Easy,All year,Yes,No,Yes
