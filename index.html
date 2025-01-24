@@ -1,12 +1,16 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Analysis Dashboard</title>       <!-- I can come through and change headders and whatnot as we get a better idea of whats going in here -->
+    <title>Finding the Best Family Hiking Trail</title>
+    
+    <!-- First load Leaflet's CSS, then your custom CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
+
+
 <body>
     <header class="header">
         <nav class="nav-bar">
@@ -28,8 +32,8 @@
                 <div class="card">
                     <h3>Basic Statistics</h3>
                     <div class="card-content">
-                        <p>Random Statistic: <span id="total-records">0</span></p>
-                        <p>Average Statistic: <span id="avg-value">0</span></p>
+                        <p>Total Trails: <span id="total-records">0</span></p>
+                        <p>Average Distance: <span id="avg-value">0</span> miles</p>
                     </div>
                 </div>
 
@@ -37,17 +41,16 @@
                 <div class="card card-accent">
                     <div class="card-header">
                         <h3>Trending Data</h3>
-                        <span class="card-badge">Live</span>                            <!-- like this live badge but we don't need it -->
+                        <span class="card-badge">Live</span>
                     </div>
                     <div class="card-content">
                         <div id="trend-chart" class="chart-container">
-                            <!-- Chart will be inserted here -->
-                             <h4>Chart will be inserted here</h4>
+                            <h4>Chart will be inserted here</h4>
                         </div>
                     </div>
                 </div>
 
-                <!-- Interactive Card  Currently has buttons but can change to a pandas chart-->
+                <!-- Interactive Card -->
                 <div class="card card-interactive">
                     <h3>Interactive Graph</h3>
                     <div class="card-content">
@@ -56,7 +59,8 @@
                         <button class="action-btn">Action 3</button>
                     </div>
                 </div>
-                <!-- Interactive Geomap -->
+
+                <!-- Map Card -->
                 <div class="card map-card">
                     <div class="card-header">
                         <h3>Columbia River Gorge Trail Map</h3>
@@ -86,17 +90,242 @@
                 </div>
             </div>
         </section>
-
-        <!-- Rest of the sections remain the same -->
-        
     </main>
 
     <footer class="footer">
         <p>&copy; 2025 Data Analysis Dashboard</p>
     </footer>
 
-    <script src="your-script.js"></script>
+    <button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
 
-<button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
+    <!-- Load JavaScript libraries at the end -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    
+    <!-- Load our trail data -->
+    <script src="trailsData.js"></script>
+    
+    <!-- Now add our map initialization code -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // First let's check if our data is available
+    console.log("Script starting, checking data availability:");
+    console.log("trailsData exists:", typeof trailsData !== 'undefined');
+    if (typeof trailsData !== 'undefined') {
+        console.log("Number of trails loaded:", trailsData.length);
+        console.log("Sample of first trail:", trailsData[0]);
+    }
+
+    // Utility function to determine marker colors based on trail difficulty
+    function getDifficultyColor(difficulty) {
+        switch(difficulty.toLowerCase()) {
+            case 'easy': return '#4CAF50';  // Green for easy trails
+            case 'moderate': return '#FFA500';  // Orange for moderate trails
+            case 'difficult': return '#FF4444';  // Red for difficult trails
+            default: return '#808080';  // Grey for unknown difficulty
+        }
+    }
+
+
+    // Initialize the map
+    const map = L.map('trailMap').setView([45.56058, -122.17239], 10);
+    
+    // Add the map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Store all markers in an object for easy access
+    const markers = {};
+    
+    // Initialize markers for all trails
+    function initializeMarkers() {
+        trailsData.forEach(trail => {
+            const lat = parseFloat(trail.latitude);
+            const lng = parseFloat(trail.longitude);
+            
+            if (!isNaN(lat) && !isNaN(lng) && 
+                lat >= -90 && lat <= 90 && 
+                lng >= -180 && lng <= 180) {
+                
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="
+                        width: 12px;
+                        height: 12px;
+                        background-color: ${getDifficultyColor(trail.difficulty)};
+                        border-radius: 50%;
+                        border: 2px solid white;
+                        box-shadow: 0 0 4px rgba(0,0,0,0.5);
+                    "></div>`
+                });
+
+                const marker = L.marker([lat, lng], { icon: icon })
+                    .bindPopup(`
+                        <strong>${trail.trail_name}</strong><br>
+                        Distance: ${trail['distance(miles)']} miles<br>
+                        Difficulty: ${trail.difficulty}<br>
+                        Elevation Gain: ${trail['elevation_gain(feet)']} ft<br>
+                        Family Friendly: ${trail.family_friendly}
+                    `);
+                
+                markers[trail.trail_name] = marker;
+            }
+        });
+    }
+
+    // Function to update visible markers based on filters
+    function updateMarkers(filters = {}) {
+        // Clear all markers from map
+        Object.values(markers).forEach(marker => marker.remove());
+        
+        // Filter trails based on current criteria
+        trailsData.forEach(trail => {
+            let showMarker = true;
+
+            // Apply difficulty filter
+            if (filters.difficulty && trail.difficulty !== filters.difficulty) {
+                showMarker = false;
+            }
+
+            // Apply distance filter
+            if (filters.minDistance !== undefined && filters.maxDistance !== undefined) {
+                const distance = trail['distance(miles)'];
+                if (distance < filters.minDistance || distance > filters.maxDistance) {
+                    showMarker = false;
+                }
+            }
+
+            // Apply family friendly filter
+            if (filters.familyFriendly && trail.family_friendly !== 'Yes') {
+                showMarker = false;
+            }
+
+            // Apply specific trail filter
+            if (filters.trailName && trail.trail_name !== filters.trailName) {
+                showMarker = false;
+            }
+
+            // Show marker if it passes all filters
+            if (showMarker && markers[trail.trail_name]) {
+                markers[trail.trail_name].addTo(map);
+            }
+        });
+    }
+
+    // Create filter controls HTML
+    const filterControls = `
+        <div class="filter-controls">
+            <h3 class="text-lg font-bold mb-4">Trail Filters</h3>
+            
+            <!-- Trail Search Dropdown -->
+            <div class="mb-4">
+                <label for="trailSelect" class="block text-sm font-medium mb-2">Select Trail:</label>
+                <select id="trailSelect" class="w-full p-2 border rounded">
+                    <option value="">All Trails</option>
+                    ${trailsData
+                        .sort((a, b) => a.trail_name.localeCompare(b.trail_name))
+                        .map(trail => `<option value="${trail.trail_name}">${trail.trail_name}</option>`)
+                        .join('')}
+                </select>
+            </div>
+
+            <!-- Difficulty Filter -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Difficulty:</label>
+                <div class="space-x-2">
+                    <button class="difficulty-filter" data-difficulty="Easy">Easy</button>
+                    <button class="difficulty-filter" data-difficulty="Moderate">Moderate</button>
+                    <button class="difficulty-filter" data-difficulty="Difficult">Difficult</button>
+                </div>
+            </div>
+
+            <!-- Distance Filter -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Distance (miles):</label>
+                <div class="flex space-x-2">
+                    <input type="number" id="minDistance" placeholder="Min" class="w-24 p-2 border rounded">
+                    <input type="number" id="maxDistance" placeholder="Max" class="w-24 p-2 border rounded">
+                    <button id="applyDistance">Apply</button>
+                </div>
+            </div>
+
+            <!-- Family Friendly Filter -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Family Friendly:</label>
+                <button id="familyFriendly">Show Family Friendly</button>
+            </div>
+
+            <!-- Reset Filters -->
+            <button id="resetFilters">Reset All Filters</button>
+        </div>
+    `;
+
+    // Add filter controls to the map
+    const filterDiv = L.DomUtil.create('div', 'filter-wrapper');
+    filterDiv.innerHTML = filterControls;
+    map.getContainer().appendChild(filterDiv);
+
+    // Prevent map interactions when using filters
+    L.DomEvent.disableClickPropagation(filterDiv);
+    L.DomEvent.disableScrollPropagation(filterDiv);
+
+    // Initialize all markers
+    initializeMarkers();
+    updateMarkers();
+
+    // Event Listeners for Filters
+    document.getElementById('trailSelect').addEventListener('change', function(e) {
+        const selectedTrail = e.target.value;
+        if (selectedTrail) {
+            updateMarkers({ trailName: selectedTrail });
+            // Center map on selected trail
+            const trail = trailsData.find(t => t.trail_name === selectedTrail);
+            map.setView([trail.latitude, trail.longitude], 14);
+        } else {
+            updateMarkers();
+            map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
+        }
+    });
+
+    // Difficulty filter buttons
+    document.querySelectorAll('.difficulty-filter').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            const difficulty = this.dataset.difficulty;
+            updateMarkers({ difficulty });
+        });
+    });
+
+    // Distance filter
+    document.getElementById('applyDistance').addEventListener('click', function() {
+        const minDistance = parseFloat(document.getElementById('minDistance').value);
+        const maxDistance = parseFloat(document.getElementById('maxDistance').value);
+        updateMarkers({ minDistance, maxDistance });
+    });
+
+    // Family friendly filter
+    document.getElementById('familyFriendly').addEventListener('click', function() {
+        this.classList.toggle('active');
+        updateMarkers({ familyFriendly: this.classList.contains('active') });
+    });
+
+    // Reset filters
+    document.getElementById('resetFilters').addEventListener('click', function() {
+        // Reset all form inputs
+        document.getElementById('trailSelect').value = '';
+        document.getElementById('minDistance').value = '';
+        document.getElementById('maxDistance').value = '';
+        document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('familyFriendly').classList.remove('active');
+        
+        // Show all markers
+        updateMarkers();
+        // Fit map to show all markers
+        map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
+    });
+});
+    </script>
 </body>
 </html>
