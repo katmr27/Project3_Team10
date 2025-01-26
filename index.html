@@ -32,8 +32,7 @@
                 <div class="card">
                     <h3>Basic Statistics</h3>
                     <div class="card-content">
-                        <p>Total Trails: <span id="total-records">0</span></p>
-                        <p>Average Distance: <span id="avg-value">0</span> miles</p>
+                        <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
                     </div>
                 </div>
 
@@ -64,11 +63,6 @@
                 <div class="card map-card">
                     <div class="card-header">
                         <h3>Columbia River Gorge Trail Map</h3>
-                        <div class="map-controls">
-                            <button class="control-btn" id="zoomIn">+</button>
-                            <button class="control-btn" id="zoomOut">-</button>
-                            <button class="control-btn" id="resetView">Reset</button>
-                        </div>
                     </div>
                     <div class="map-container" id="trailMap">
                         <!-- Map will be inserted here by JavaScript -->
@@ -119,60 +113,70 @@ document.addEventListener('DOMContentLoaded', function() {
     // Utility function to determine marker colors based on trail difficulty
     function getDifficultyColor(difficulty) {
         switch(difficulty.toLowerCase()) {
-            case 'easy': return '#4CAF50';  // Green for easy trails
+            case 'easy': return '#4CAF50';   // Green for easy trails
             case 'moderate': return '#FFA500';  // Orange for moderate trails
-            case 'difficult': return '#FF4444';  // Red for difficult trails
-            default: return '#808080';  // Grey for unknown difficulty
+            case 'difficult': return '#FF4444'; // Red for difficult trails
+            default: return '#808080';      // Grey for unknown difficulty
         }
     }
-
 
     // Initialize the map
     const map = L.map('trailMap').setView([45.56058, -122.17239], 10);
     
     // Add the map tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+    L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+        attribution: '© CyclOSM contributors'
     }).addTo(map);
 
     // Store all markers in an object for easy access
     const markers = {};
     
+    // 1) Define distance constants at the top:
+    const MAX_DISTANCE_METERS = 50000;
+    const centerPoint = L.latLng(45.56058, -122.17239);
+
     // Initialize markers for all trails
     function initializeMarkers() {
         trailsData.forEach(trail => {
             const lat = parseFloat(trail.latitude);
             const lng = parseFloat(trail.longitude);
             
-            if (!isNaN(lat) && !isNaN(lng) && 
-                lat >= -90 && lat <= 90 && 
+            if (!isNaN(lat) && !isNaN(lng) &&
+                lat >= -90 && lat <= 90 &&
                 lng >= -180 && lng <= 180) {
-                
-                const icon = L.divIcon({
-                    className: 'custom-marker',
-                    html: `<div style="
-                        width: 12px;
-                        height: 12px;
-                        background-color: ${getDifficultyColor(trail.difficulty)};
-                        border-radius: 50%;
-                        border: 2px solid white;
-                        box-shadow: 0 0 4px rgba(0,0,0,0.5);
-                    "></div>`
-                });
 
-                const marker = L.marker([lat, lng], { icon: icon })
-                    .bindPopup(`
-                        <strong>${trail.trail_name}</strong><br>
-                        Distance: ${trail['distance(miles)']} miles<br>
-                        Difficulty: ${trail.difficulty}<br>
-                        Elevation Gain: ${trail['elevation_gain(feet)']} ft<br>
-                        Family Friendly: ${trail.family_friendly}
-                    `);
-                
-                markers[trail.trail_name] = marker;
-            }
-        });
-    }
+                // Calculate distance from our center
+                const trailPoint = L.latLng(lat, lng);
+                const distanceFromCenter = centerPoint.distanceTo(trailPoint);
+
+                // Only add markers if within 30 miles (~48,280 meters)
+                if (distanceFromCenter <= MAX_DISTANCE_METERS) {
+                    const icon = L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="
+                            width: 12px;
+                            height: 12px;
+                            background-color: ${getDifficultyColor(trail.difficulty)};
+                            border-radius: 50%;
+                            border: 2px solid white;
+                            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+                        "></div>`
+                    });
+
+                    const marker = L.marker([lat, lng], { icon: icon })
+                        .bindPopup(`
+                            <strong>${trail.trail_name}</strong><br>
+                            Distance: ${trail['distance(miles)']} miles<br>
+                            Difficulty: ${trail.difficulty}<br>
+                            Elevation Gain: ${trail['elevation_gain(feet)']} ft<br>
+                            Family Friendly: ${trail.family_friendly}
+                        `);
+
+                    markers[trail.trail_name] = marker;
+                }
+            } // <-- Make sure this curly brace is here to close the if
+        }); // end forEach
+    } // end function initializeMarkers
 
     // Function to update visible markers based on filters
     function updateMarkers(filters = {}) {
