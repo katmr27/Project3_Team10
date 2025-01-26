@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finding the Best Family Hiking Trail</title>
-    
-    <!-- First load Leaflet's CSS, then your custom CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
-
 
 <body>
     <header class="header">
@@ -28,18 +25,19 @@
         <section id="dashboard" class="dashboard-section">
             <h2>Dashboard Overview</h2>
             <div class="dashboard-grid">
-                <!-- Basic Card -->
                 <div class="card">
-                    <h3>Basic Statistics</h3>
+                    <div class="card-header">
+                        <h3>Trail Hazard Overview</h3>
+                    </div>
                     <div class="card-content">
+                        <p>This is some text about the trail hazards before showing the graph.</p>
                         <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
                     </div>
                 </div>
 
-                <!-- Card with Header Accent -->
                 <div class="card card-accent">
                     <div class="card-header">
-                        <h3>Trending Data</h3>
+                        <h3>Seasonal Trail Conditions</h3>
                         <span class="card-badge">Live</span>
                     </div>
                     <div class="card-content">
@@ -49,9 +47,10 @@
                     </div>
                 </div>
 
-                <!-- Interactive Card -->
                 <div class="card card-interactive">
-                    <h3>Interactive Graph</h3>
+                    <div class="card-header">
+                        <h3>Interactive Graph</h3>
+                    </div>
                     <div class="card-content">
                         <button class="action-btn">Action 1</button>
                         <button class="action-btn">Action 2</button>
@@ -59,14 +58,11 @@
                     </div>
                 </div>
 
-                <!-- Map Card -->
                 <div class="card map-card">
                     <div class="card-header">
                         <h3>Columbia River Gorge Trail Map</h3>
                     </div>
-                    <div class="map-container" id="trailMap">
-                        <!-- Map will be inserted here by JavaScript -->
-                    </div>
+                    <div class="map-container" id="trailMap"></div>
                     <div class="map-legend">
                         <div class="legend-item">
                             <span class="legend-color easy"></span>
@@ -92,50 +88,36 @@
 
     <button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
 
-    <!-- Load JavaScript libraries at the end -->
+    <!-- Load JavaScript libraries -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     
-    <!-- Load our trail data -->
+    <!-- Load trail data -->
     <script src="trailsData.js"></script>
     
-    <!-- Now add our map initialization code -->
+    <!-- Map initialization -->
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // First let's check if our data is available
-    console.log("Script starting, checking data availability:");
-    console.log("trailsData exists:", typeof trailsData !== 'undefined');
-    if (typeof trailsData !== 'undefined') {
-        console.log("Number of trails loaded:", trailsData.length);
-        console.log("Sample of first trail:", trailsData[0]);
-    }
-
-    // Utility function to determine marker colors based on trail difficulty
     function getDifficultyColor(difficulty) {
         switch(difficulty.toLowerCase()) {
-            case 'easy': return '#4CAF50';   // Green for easy trails
-            case 'moderate': return '#FFA500';  // Orange for moderate trails
-            case 'difficult': return '#FF4444'; // Red for difficult trails
-            default: return '#808080';      // Grey for unknown difficulty
+            case 'easy': return '#4CAF50';
+            case 'moderate': return '#FFA500';
+            case 'difficult': return '#FF4444';
+            default: return '#808080';
         }
     }
 
-    // Initialize the map
     const map = L.map('trailMap').setView([45.56058, -122.17239], 10);
     
-    // Add the map tiles
     L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
         attribution: '© CyclOSM contributors'
     }).addTo(map);
 
-    // Store all markers in an object for easy access
     const markers = {};
     
-    // 1) Define distance constants at the top:
     const MAX_DISTANCE_METERS = 50000;
     const centerPoint = L.latLng(45.56058, -122.17239);
 
-    // Initialize markers for all trails
     function initializeMarkers() {
         trailsData.forEach(trail => {
             const lat = parseFloat(trail.latitude);
@@ -145,11 +127,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 lat >= -90 && lat <= 90 &&
                 lng >= -180 && lng <= 180) {
 
-                // Calculate distance from our center
                 const trailPoint = L.latLng(lat, lng);
                 const distanceFromCenter = centerPoint.distanceTo(trailPoint);
 
-                // Only add markers if within 30 miles (~48,280 meters)
                 if (distanceFromCenter <= MAX_DISTANCE_METERS) {
                     const icon = L.divIcon({
                         className: 'custom-marker',
@@ -174,25 +154,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     markers[trail.trail_name] = marker;
                 }
-            } // <-- Make sure this curly brace is here to close the if
-        }); // end forEach
-    } // end function initializeMarkers
+            }
+        });
+    }
 
-    // Function to update visible markers based on filters
     function updateMarkers(filters = {}) {
-        // Clear all markers from map
         Object.values(markers).forEach(marker => marker.remove());
         
-        // Filter trails based on current criteria
         trailsData.forEach(trail => {
             let showMarker = true;
 
-            // Apply difficulty filter
             if (filters.difficulty && trail.difficulty !== filters.difficulty) {
                 showMarker = false;
             }
 
-            // Apply distance filter
             if (filters.minDistance !== undefined && filters.maxDistance !== undefined) {
                 const distance = trail['distance(miles)'];
                 if (distance < filters.minDistance || distance > filters.maxDistance) {
@@ -200,29 +175,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
-            // Apply family friendly filter
             if (filters.familyFriendly && trail.family_friendly !== 'Yes') {
                 showMarker = false;
             }
 
-            // Apply specific trail filter
             if (filters.trailName && trail.trail_name !== filters.trailName) {
                 showMarker = false;
             }
 
-            // Show marker if it passes all filters
             if (showMarker && markers[trail.trail_name]) {
                 markers[trail.trail_name].addTo(map);
             }
         });
     }
 
-    // Create filter controls HTML
     const filterControls = `
+        <button class="collapse-button">◀</button>
         <div class="filter-controls">
             <h3 class="text-lg font-bold mb-4">Trail Filters</h3>
-            
-            <!-- Trail Search Dropdown -->
+
             <div class="mb-4">
                 <label for="trailSelect" class="block text-sm font-medium mb-2">Select Trail:</label>
                 <select id="trailSelect" class="w-full p-2 border rounded">
@@ -234,7 +205,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </select>
             </div>
 
-            <!-- Difficulty Filter -->
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2">Difficulty:</label>
                 <div class="space-x-2">
@@ -244,7 +214,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
 
-            <!-- Distance Filter -->
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2">Distance (miles):</label>
                 <div class="flex space-x-2">
@@ -254,36 +223,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
 
-            <!-- Family Friendly Filter -->
             <div class="mb-4">
                 <label class="block text-sm font-medium mb-2">Family Friendly:</label>
                 <button id="familyFriendly">Show Family Friendly</button>
             </div>
 
-            <!-- Reset Filters -->
             <button id="resetFilters">Reset All Filters</button>
         </div>
     `;
 
-    // Add filter controls to the map
     const filterDiv = L.DomUtil.create('div', 'filter-wrapper');
     filterDiv.innerHTML = filterControls;
     map.getContainer().appendChild(filterDiv);
 
-    // Prevent map interactions when using filters
     L.DomEvent.disableClickPropagation(filterDiv);
     L.DomEvent.disableScrollPropagation(filterDiv);
 
-    // Initialize all markers
     initializeMarkers();
     updateMarkers();
 
-    // Event Listeners for Filters
     document.getElementById('trailSelect').addEventListener('change', function(e) {
         const selectedTrail = e.target.value;
         if (selectedTrail) {
             updateMarkers({ trailName: selectedTrail });
-            // Center map on selected trail
             const trail = trailsData.find(t => t.trail_name === selectedTrail);
             map.setView([trail.latitude, trail.longitude], 14);
         } else {
@@ -292,7 +254,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Difficulty filter buttons
+    document.querySelector('.collapse-button').addEventListener('click', function() {
+        const wrapper = document.querySelector('.filter-wrapper');
+        wrapper.classList.toggle('collapsed');
+        this.textContent = wrapper.classList.contains('collapsed') ? '▶' : '◀';
+    });
+
     document.querySelectorAll('.difficulty-filter').forEach(button => {
         button.addEventListener('click', function() {
             document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
@@ -302,31 +269,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Distance filter
     document.getElementById('applyDistance').addEventListener('click', function() {
         const minDistance = parseFloat(document.getElementById('minDistance').value);
         const maxDistance = parseFloat(document.getElementById('maxDistance').value);
         updateMarkers({ minDistance, maxDistance });
     });
 
-    // Family friendly filter
     document.getElementById('familyFriendly').addEventListener('click', function() {
         this.classList.toggle('active');
         updateMarkers({ familyFriendly: this.classList.contains('active') });
     });
 
-    // Reset filters
     document.getElementById('resetFilters').addEventListener('click', function() {
-        // Reset all form inputs
         document.getElementById('trailSelect').value = '';
         document.getElementById('minDistance').value = '';
         document.getElementById('maxDistance').value = '';
         document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
         document.getElementById('familyFriendly').classList.remove('active');
         
-        // Show all markers
         updateMarkers();
-        // Fit map to show all markers
         map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
     });
 });

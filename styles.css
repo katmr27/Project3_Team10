@@ -1,35 +1,24 @@
-/* ==========================================================================
-   CSS Variables and Base Configuration
-   ========================================================================== */
-   :root {
-    /* Colors */
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --accent-color: #e74c3c;
+/* CSS Variables and Base Configuration */
+:root {
+    --primary-color: #2B4C34;
+    --secondary-color: #8B4513;
+    --accent-color: #F5F1E3;
     --background-color: #f5f6fa;
-    --text-color: #2c3e50;
-    --card-background: #ffffff;
-    
-    /* Status Colors */
+    --text-color: #333333;
+    --card-background: rgba(255, 255, 255, 0.7);
     --color-success: #4CAF50;
     --color-warning: #FFA726;
     --color-danger: #E53935;
     --color-info: #2196F3;
-    
-    /* Shadows and Effects */
     --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     --card-hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     --floating-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    
-    /* Spacing and Layout */
     --card-border-radius: 8px;
     --grid-max-width: 1200px;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
-    
-    /* Typography */
     --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-md: 1rem;
@@ -37,15 +26,9 @@
     --font-size-xl: 1.5rem;
     --font-size-2xl: 2rem;
     --font-size-3xl: 2.5rem;
-    
-    /* Animations */
-    --transition-speed: 0.3s;
-    --transition-timing: ease;
 }
 
-/* ==========================================================================
-   Layout & Grid System
-   ========================================================================== */
+/* Layout & Grid System */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
@@ -59,10 +42,15 @@
         "interactive interactive";
 }
 
-/* ==========================================================================
-   Navigation Components
-   ========================================================================== */
+/* Body Style */
+body {
+    background: linear-gradient(rgba(245, 241, 227, 0.97), rgba(245, 241, 227, 0.97)),
+                url('path/to/subtle-pattern.png');
+}
+
+/* Navigation Components */
 .nav-bar {
+    border-bottom: 2px solid var(--secondary-color);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,21 +90,17 @@
     }
 }
 
-/* ==========================================================================
-   Image/Chart Styles
-   ========================================================================== */
-   .chart-image {
+/* Image/Chart Styles */
+.chart-image {
     max-width: 100%;
     height: auto;
     display: block;
     margin: 0 auto;
 }
 
-/* ==========================================================================
-   Card Components
-   ========================================================================== */
+/* Card Components */
 .card {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.85);
     border-radius: var(--card-border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--card-shadow);
@@ -129,21 +113,21 @@
         box-shadow: var(--card-hover-shadow);
     }
 
-    /* Card Header Styles */
     .card-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-bottom: var(--spacing-md);
     }
-
-    /* Card Content Styles */
+    .card-header h3::before {
+        content: '🌲';
+        margin-right: 8px;
+    }
     .card-content {
         padding-top: var(--spacing-md);
     }
 }
 
-/* Card Variants */
 .card-accent .card-header {
     border-bottom: 2px solid var(--accent-color);
 }
@@ -152,10 +136,8 @@
     cursor: pointer;
 }
 
-/* ==========================================================================
-   Map Components
-   ========================================================================== */
-   .map-card {
+/* Map Components */
+.map-card {
     grid-area: map;
     overflow: hidden;
 }
@@ -203,6 +185,26 @@
     background: var(--card-background);
     border-radius: var(--card-border-radius);
     box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease;
+    padding: var(--spacing-md);
+}
+
+.filter-wrapper.collapsed {
+    transform: translateX(calc(100% - 30px));
+}
+
+.collapse-button {
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--card-background);
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: -2px 0 4px rgba(0,0,0,0.1);
+    z-index: 1001;
 }
 
 .filter-controls {
@@ -238,9 +240,7 @@
     border-radius: var(--card-border-radius);
 }
 
-/* ==========================================================================
-   Utility Components
-   ========================================================================== */
+/* Utility Components */
 .back-to-top {
     position: fixed;
     bottom: var(--spacing-md);
@@ -266,9 +266,7 @@
     }
 }
 
-/* ==========================================================================
-   Responsive Design
-   ========================================================================== */
+/* Responsive Design */
 @media (max-width: 768px) {
     .dashboard-grid {
         grid-template-areas: 
@@ -294,9 +292,7 @@
     }
 }
 
-/* ==========================================================================
-   Animations
-   ========================================================================== */
+/* Animations */
 @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
