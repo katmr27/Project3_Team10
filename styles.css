@@ -1,30 +1,24 @@
 /* CSS Variables and Base Configuration */
 :root {
-    --primary-color: #2B4C34;
     --secondary-color: #8B4513;
     --accent-color: #F5F1E3;
     --background-color: #f5f6fa;
-    --text-color: #333333;
     --card-background: rgba(255, 255, 255, 0.7);
     --color-success: #4CAF50;
-    --color-warning: #FFA726;
-    --color-danger: #E53935;
-    --color-info: #2196F3;
     --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     --card-hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     --floating-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --card-border-radius: 8px;
     --grid-max-width: 1200px;
+    --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
     --spacing-md: 1rem;
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
-    --font-size-xs: 0.75rem;
     --font-size-sm: 0.875rem;
     --font-size-md: 1rem;
     --font-size-lg: 1.25rem;
     --font-size-xl: 1.5rem;
-    --font-size-2xl: 2rem;
     --font-size-3xl: 2.5rem;
 }
 
@@ -38,15 +32,16 @@
     margin: 0 auto;
     grid-template-areas: 
         "map      map"
-        "basic    trend"
-        "interactive interactive";
+        "basic    trend";
 }
 
 /* Body Style */
 body {
-    background: linear-gradient(rgba(245, 241, 227, 0.97), rgba(245, 241, 227, 0.97)),
-                url('path/to/subtle-pattern.png');
-}
+    background-image: url('./images/forest_image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
 
 /* Navigation Components */
 .nav-bar {
@@ -100,33 +95,45 @@ body {
 
 /* Card Components */
 .card {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 252, 245, 0.85);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: var(--card-border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--card-shadow);
     backdrop-filter: blur(10px);
     transition: transform var(--transition-speed) var(--transition-timing),
                 box-shadow var(--transition-speed) var(--transition-timing);
+ }
+ 
+ .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+ }
 
-    &:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--card-hover-shadow);
-    }
+ .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
 
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-bottom: var(--spacing-md);
-    }
+.card-header h3 {
+    font-family: 'Playfair Display', 'Crimson Text', serif;
+    font-size: 1.50rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+
     .card-header h3::before {
         content: '🌲';
         margin-right: 8px;
     }
     .card-content {
-        padding-top: var(--spacing-md);
+        padding-top: var(--spacing-xs);
     }
-}
 
 .card-accent .card-header {
     border-bottom: 2px solid var(--accent-color);
@@ -153,7 +160,7 @@ body {
 }
 
 .map-container { 
-    height: 600px;
+    height: 700px;
     width: 100%;
 }
 
@@ -171,26 +178,26 @@ body {
 .map-legend {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-xl);
-    padding: var(--spacing-md);
-    border-top: 1px solid #eee;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-top: 0px solid #eee;
 }
 
 .filter-wrapper {
     position: absolute;
-    top: var(--spacing-lg);
-    right: var(--spacing-lg);
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
     z-index: 1000;
     max-width: 300px;
     background: var(--card-background);
     border-radius: var(--card-border-radius);
     box-shadow: var(--card-shadow);
     transition: transform 0.3s ease;
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
 }
 
 .filter-wrapper.collapsed {
-    transform: translateX(calc(100% - 30px));
+    transform: translateX(calc(100% - 10px));
 }
 
 .collapse-button {

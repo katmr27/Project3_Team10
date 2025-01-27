@@ -6,6 +6,7 @@
     <title>Finding the Best Family Hiking Trail</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Crimson+Text&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -16,70 +17,59 @@
             <ul class="nav-links">
                 <li><a href="#dashboard">Dashboard</a></li>
                 <li><a href="#trailMap">Map</a></li>
-                <li><a href="#trend-chart">Trend Chart</a></li>
+                <li><a href="#hazards">Hazards</a></li>
+                <li><a href="#seasonal">Seasonal Conditioins</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="main-content">
-        <section id="dashboard" class="dashboard-section">
-            <h2>Dashboard Overview</h2>
-            <div class="dashboard-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Trail Hazard Overview</h3>
-                    </div>
-                    <div class="card-content">
-                        <p>This is some text about the trail hazards before showing the graph.</p>
-                        <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
-                    </div>
+<section id="dashboard" class="dashboard-section">
+    <h2>Dashboard Confessional</h2>
+    <div class="dashboard-grid">
+        <div class="card map-card" style="grid-area: map;">
+            <div class="card-header">
+                <h3>Columbia River Gorge Trail Map</h3>
+            </div>
+            <div class="map-container" id="trailMap"></div>
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-color easy"></span>
+                    <span>Easy Trails</span>
                 </div>
-
-                <div class="card card-accent">
-                    <div class="card-header">
-                        <h3>Seasonal Trail Conditions</h3>
-                        <span class="card-badge">Live</span>
-                    </div>
-                    <div class="card-content">
-                        <div id="trend-chart" class="chart-container">
-                            <h4>Chart will be inserted here</h4>
-                        </div>
-                    </div>
+                <div class="legend-item">
+                    <span class="legend-color moderate"></span>
+                    <span>Moderate Trails</span>
                 </div>
-
-                <div class="card card-interactive">
-                    <div class="card-header">
-                        <h3>Interactive Graph</h3>
-                    </div>
-                    <div class="card-content">
-                        <button class="action-btn">Action 1</button>
-                        <button class="action-btn">Action 2</button>
-                        <button class="action-btn">Action 3</button>
-                    </div>
-                </div>
-
-                <div class="card map-card">
-                    <div class="card-header">
-                        <h3>Columbia River Gorge Trail Map</h3>
-                    </div>
-                    <div class="map-container" id="trailMap"></div>
-                    <div class="map-legend">
-                        <div class="legend-item">
-                            <span class="legend-color easy"></span>
-                            <span>Easy Trails</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color moderate"></span>
-                            <span>Moderate Trails</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color difficult"></span>
-                            <span>Difficult Trails</span>
-                        </div>
-                    </div>
+                <div class="legend-item">
+                    <span class="legend-color difficult"></span>
+                    <span>Difficult Trails</span>
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <div id="hazards" class="card card-accent" style="grid-area: basic;">
+            <div class="card-header">
+                <h3>Trail Hazard Overview</h3>
+            </div>
+            <div class="card-content">
+                <p>This is some text about the trail hazards before showing the graph.</p>
+                <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
+            </div>
+        </div>
+
+        <div id="seasonal" class="card card-accent" style="grid-area: trend;">
+            <div class="card-header">
+                <h3>Seasonal Trail Conditions</h3>
+            </div>
+            <div class="card-content">
+                <div id="trend-chart" class="chart-container">
+                    <h4>Chart will be inserted here</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
     </main>
 
     <footer class="footer">
@@ -91,7 +81,9 @@
     <!-- Load JavaScript libraries -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
     <!-- Load trail data -->
     <script src="trailsData.js"></script>
     
@@ -291,6 +283,22 @@ document.addEventListener('DOMContentLoaded', function() {
         map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
     });
 });
+    </script>
+    <script>
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        };
+        
+        backToTopButton.onclick = function() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        };
     </script>
 </body>
 </html>

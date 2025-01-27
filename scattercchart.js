@@ -1,5 +1,5 @@
-function loadCSV(family_friendly_df){
-  Papa.parse(family_friendly_df, {
+function loadCSV(all_trails_data_clean_df){
+  Papa.parse(all_trails_data_clean_df, {
     complete: function(result) {
       console.log(result.data);
       createBubbleChart(result.data);
@@ -9,8 +9,8 @@ function loadCSV(family_friendly_df){
 }
 
 document.getElementById('csvInput').addEventListener('change', function(e){
-  const file = e.target.family_friendly_dfs[0];
-  if (family_friendly_df){
+  const file = e.target.all_trails_data_clean_df[0];
+  if (all_trails_data_clean_df){
 
   }
 });
