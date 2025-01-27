@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Crimson+Text&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 
 <body>
@@ -24,52 +25,53 @@
     </header>
 
     <main class="main-content">
-<section id="dashboard" class="dashboard-section">
-    <h2>Dashboard Confessional</h2>
-    <div class="dashboard-grid">
-        <div class="card map-card" style="grid-area: map;">
-            <div class="card-header">
-                <h3>Columbia River Gorge Trail Map</h3>
-            </div>
-            <div class="map-container" id="trailMap"></div>
-            <div class="map-legend">
-                <div class="legend-item">
-                    <span class="legend-color easy"></span>
-                    <span>Easy Trails</span>
+        <section id="dashboard" class="dashboard-section">
+            <h2>Dashboard Confessional</h2>
+            <div class="dashboard-grid">
+                <div class="card map-card" style="grid-area: map;">
+                    <div class="card-header">
+                        <h3>Columbia River Gorge Trail Map</h3>
+                    </div>
+                    <div class="map-container" id="trailMap"></div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color easy"></span>
+                            <span>Easy Trails</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color moderate"></span>
+                            <span>Moderate Trails</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color difficult"></span>
+                            <span>Difficult Trails</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color moderate"></span>
-                    <span>Moderate Trails</span>
+                
+                <div id="hazards" class="card card-accent" style="grid-area: basic;">
+                    <div class="card-header">
+                        <h3>Nature Bites Back: Ranking Common Hiking Hazards</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>There are 3 types of hazards on the trails in the Columbia River Gorge:</p>
+                        <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <span class="legend-color difficult"></span>
-                    <span>Difficult Trails</span>
-                </div>
-            </div>
-        </div>
-        
-        <div id="hazards" class="card card-accent" style="grid-area: basic;">
-            <div class="card-header">
-                <h3>Trail Hazard Overview</h3>
-            </div>
-            <div class="card-content">
-                <p>This is some text about the trail hazards before showing the graph.</p>
-                <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
-            </div>
-        </div>
 
-        <div id="seasonal" class="card card-accent" style="grid-area: trend;">
-            <div class="card-header">
-                <h3>Seasonal Trail Conditions</h3>
-            </div>
-            <div class="card-content">
-                <div id="trend-chart" class="chart-container">
-                    <h4>Chart will be inserted here</h4>
+                <div id="seasonal" class="card card-accent" style="grid-area: trend;">
+                    <div class="card-header">
+                        <h3>Climbing the Data: The Relationship Between Elevation and Distance</h3>
+                    </div>
+                    <div class="card-content">
+                        <p>How does the elevation of a trail relate to its distance? Let's find out!</p>
+                        <div id="trend-chart" class="chart-container">
+                            <div id="scatter-plot" style="width: 100%; height: 400px;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
     </main>
 
     <footer class="footer">
@@ -81,208 +83,203 @@
     <!-- Load JavaScript libraries -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-
-    <!-- Load trail data -->
     <script src="trailsData.js"></script>
     
     <!-- Map initialization -->
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    function getDifficultyColor(difficulty) {
-        switch(difficulty.toLowerCase()) {
-            case 'easy': return '#4CAF50';
-            case 'moderate': return '#FFA500';
-            case 'difficult': return '#FF4444';
-            default: return '#808080';
-        }
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            function getDifficultyColor(difficulty) {
+                switch(difficulty.toLowerCase()) {
+                    case 'easy': return '#4CAF50';
+                    case 'moderate': return '#FFA500';
+                    case 'difficult': return '#FF4444';
+                    default: return '#808080';
+                }
+            }
 
-    const map = L.map('trailMap').setView([45.56058, -122.17239], 10);
-    
-    L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-        attribution: '© CyclOSM contributors'
-    }).addTo(map);
-
-    const markers = {};
-    
-    const MAX_DISTANCE_METERS = 50000;
-    const centerPoint = L.latLng(45.56058, -122.17239);
-
-    function initializeMarkers() {
-        trailsData.forEach(trail => {
-            const lat = parseFloat(trail.latitude);
-            const lng = parseFloat(trail.longitude);
+            const map = L.map('trailMap').setView([45.56058, -122.17239], 10);
             
-            if (!isNaN(lat) && !isNaN(lng) &&
-                lat >= -90 && lat <= 90 &&
-                lng >= -180 && lng <= 180) {
+            L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+                attribution: '© CyclOSM contributors'
+            }).addTo(map);
 
-                const trailPoint = L.latLng(lat, lng);
-                const distanceFromCenter = centerPoint.distanceTo(trailPoint);
+            const markers = {};
+            const MAX_DISTANCE_METERS = 50000;
+            const centerPoint = L.latLng(45.56058, -122.17239);
 
-                if (distanceFromCenter <= MAX_DISTANCE_METERS) {
-                    const icon = L.divIcon({
-                        className: 'custom-marker',
-                        html: `<div style="
-                            width: 12px;
-                            height: 12px;
-                            background-color: ${getDifficultyColor(trail.difficulty)};
-                            border-radius: 50%;
-                            border: 2px solid white;
-                            box-shadow: 0 0 4px rgba(0,0,0,0.5);
-                        "></div>`
-                    });
+            function initializeMarkers() {
+                trailsData.forEach(trail => {
+                    const lat = parseFloat(trail.latitude);
+                    const lng = parseFloat(trail.longitude);
+                    
+                    if (!isNaN(lat) && !isNaN(lng) &&
+                        lat >= -90 && lat <= 90 &&
+                        lng >= -180 && lng <= 180) {
 
-                    const marker = L.marker([lat, lng], { icon: icon })
-                        .bindPopup(`
-                            <strong>${trail.trail_name}</strong><br>
-                            Distance: ${trail['distance(miles)']} miles<br>
-                            Difficulty: ${trail.difficulty}<br>
-                            Elevation Gain: ${trail['elevation_gain(feet)']} ft<br>
-                            Family Friendly: ${trail.family_friendly}
-                        `);
+                        const trailPoint = L.latLng(lat, lng);
+                        const distanceFromCenter = centerPoint.distanceTo(trailPoint);
 
-                    markers[trail.trail_name] = marker;
-                }
-            }
-        });
-    }
+                        if (distanceFromCenter <= MAX_DISTANCE_METERS) {
+                            const icon = L.divIcon({
+                                className: 'custom-marker',
+                                html: `<div style="
+                                    width: 12px;
+                                    height: 12px;
+                                    background-color: ${getDifficultyColor(trail.difficulty)};
+                                    border-radius: 50%;
+                                    border: 2px solid white;
+                                    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+                                "></div>`
+                            });
 
-    function updateMarkers(filters = {}) {
-        Object.values(markers).forEach(marker => marker.remove());
-        
-        trailsData.forEach(trail => {
-            let showMarker = true;
+                            const marker = L.marker([lat, lng], { icon: icon })
+                                .bindPopup(`
+                                    <strong>${trail.trail_name}</strong><br>
+                                    Distance: ${trail['distance(miles)']} miles<br>
+                                    Difficulty: ${trail.difficulty}<br>
+                                    Elevation Gain: ${trail['elevation_gain(feet)']} ft<br>
+                                    Family Friendly: ${trail.family_friendly}
+                                `);
 
-            if (filters.difficulty && trail.difficulty !== filters.difficulty) {
-                showMarker = false;
-            }
-
-            if (filters.minDistance !== undefined && filters.maxDistance !== undefined) {
-                const distance = trail['distance(miles)'];
-                if (distance < filters.minDistance || distance > filters.maxDistance) {
-                    showMarker = false;
-                }
+                            markers[trail.trail_name] = marker;
+                        }
+                    }
+                });
             }
 
-            if (filters.familyFriendly && trail.family_friendly !== 'Yes') {
-                showMarker = false;
+            function updateMarkers(filters = {}) {
+                Object.values(markers).forEach(marker => marker.remove());
+                
+                trailsData.forEach(trail => {
+                    let showMarker = true;
+
+                    if (filters.difficulty && trail.difficulty !== filters.difficulty) {
+                        showMarker = false;
+                    }
+
+                    if (filters.minDistance !== undefined && filters.maxDistance !== undefined) {
+                        const distance = trail['distance(miles)'];
+                        if (distance < filters.minDistance || distance > filters.maxDistance) {
+                            showMarker = false;
+                        }
+                    }
+
+                    if (filters.familyFriendly && trail.family_friendly !== 'Yes') {
+                        showMarker = false;
+                    }
+
+                    if (filters.trailName && trail.trail_name !== filters.trailName) {
+                        showMarker = false;
+                    }
+
+                    if (showMarker && markers[trail.trail_name]) {
+                        markers[trail.trail_name].addTo(map);
+                    }
+                });
             }
 
-            if (filters.trailName && trail.trail_name !== filters.trailName) {
-                showMarker = false;
-            }
+            const filterControls = `
+                <button class="collapse-button">◀</button>
+                <div class="filter-controls">
+                    <h3 class="text-lg font-bold mb-4">Trail Filters</h3>
 
-            if (showMarker && markers[trail.trail_name]) {
-                markers[trail.trail_name].addTo(map);
-            }
-        });
-    }
+                    <div class="mb-4">
+                        <label for="trailSelect" class="block text-sm font-medium mb-2">Select Trail:</label>
+                        <select id="trailSelect" class="w-full p-2 border rounded">
+                            <option value="">All Trails</option>
+                            ${trailsData
+                                .sort((a, b) => a.trail_name.localeCompare(b.trail_name))
+                                .map(trail => `<option value="${trail.trail_name}">${trail.trail_name}</option>`)
+                                .join('')}
+                        </select>
+                    </div>
 
-    const filterControls = `
-        <button class="collapse-button">◀</button>
-        <div class="filter-controls">
-            <h3 class="text-lg font-bold mb-4">Trail Filters</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Difficulty:</label>
+                        <div class="space-x-2">
+                            <button class="difficulty-filter" data-difficulty="Easy">Easy</button>
+                            <button class="difficulty-filter" data-difficulty="Moderate">Moderate</button>
+                            <button class="difficulty-filter" data-difficulty="Difficult">Difficult</button>
+                        </div>
+                    </div>
 
-            <div class="mb-4">
-                <label for="trailSelect" class="block text-sm font-medium mb-2">Select Trail:</label>
-                <select id="trailSelect" class="w-full p-2 border rounded">
-                    <option value="">All Trails</option>
-                    ${trailsData
-                        .sort((a, b) => a.trail_name.localeCompare(b.trail_name))
-                        .map(trail => `<option value="${trail.trail_name}">${trail.trail_name}</option>`)
-                        .join('')}
-                </select>
-            </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Distance (miles):</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="minDistance" placeholder="Min" class="w-24 p-2 border rounded">
+                            <input type="number" id="maxDistance" placeholder="Max" class="w-24 p-2 border rounded">
+                            <button id="applyDistance">Apply</button>
+                        </div>
+                    </div>
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">Difficulty:</label>
-                <div class="space-x-2">
-                    <button class="difficulty-filter" data-difficulty="Easy">Easy</button>
-                    <button class="difficulty-filter" data-difficulty="Moderate">Moderate</button>
-                    <button class="difficulty-filter" data-difficulty="Difficult">Difficult</button>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Family Friendly:</label>
+                        <button id="familyFriendly">Show Family Friendly</button>
+                    </div>
+
+                    <button id="resetFilters">Reset All Filters</button>
                 </div>
-            </div>
+            `;
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">Distance (miles):</label>
-                <div class="flex space-x-2">
-                    <input type="number" id="minDistance" placeholder="Min" class="w-24 p-2 border rounded">
-                    <input type="number" id="maxDistance" placeholder="Max" class="w-24 p-2 border rounded">
-                    <button id="applyDistance">Apply</button>
-                </div>
-            </div>
+            const filterDiv = L.DomUtil.create('div', 'filter-wrapper');
+            filterDiv.innerHTML = filterControls;
+            map.getContainer().appendChild(filterDiv);
 
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2">Family Friendly:</label>
-                <button id="familyFriendly">Show Family Friendly</button>
-            </div>
+            L.DomEvent.disableClickPropagation(filterDiv);
+            L.DomEvent.disableScrollPropagation(filterDiv);
 
-            <button id="resetFilters">Reset All Filters</button>
-        </div>
-    `;
-
-    const filterDiv = L.DomUtil.create('div', 'filter-wrapper');
-    filterDiv.innerHTML = filterControls;
-    map.getContainer().appendChild(filterDiv);
-
-    L.DomEvent.disableClickPropagation(filterDiv);
-    L.DomEvent.disableScrollPropagation(filterDiv);
-
-    initializeMarkers();
-    updateMarkers();
-
-    document.getElementById('trailSelect').addEventListener('change', function(e) {
-        const selectedTrail = e.target.value;
-        if (selectedTrail) {
-            updateMarkers({ trailName: selectedTrail });
-            const trail = trailsData.find(t => t.trail_name === selectedTrail);
-            map.setView([trail.latitude, trail.longitude], 14);
-        } else {
+            initializeMarkers();
             updateMarkers();
-            map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
-        }
-    });
 
-    document.querySelector('.collapse-button').addEventListener('click', function() {
-        const wrapper = document.querySelector('.filter-wrapper');
-        wrapper.classList.toggle('collapsed');
-        this.textContent = wrapper.classList.contains('collapsed') ? '▶' : '◀';
-    });
+            document.getElementById('trailSelect').addEventListener('change', function(e) {
+                const selectedTrail = e.target.value;
+                if (selectedTrail) {
+                    updateMarkers({ trailName: selectedTrail });
+                    const trail = trailsData.find(t => t.trail_name === selectedTrail);
+                    map.setView([trail.latitude, trail.longitude], 14);
+                } else {
+                    updateMarkers();
+                    map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
+                }
+            });
 
-    document.querySelectorAll('.difficulty-filter').forEach(button => {
-        button.addEventListener('click', function() {
-            document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            const difficulty = this.dataset.difficulty;
-            updateMarkers({ difficulty });
+            document.querySelector('.collapse-button').addEventListener('click', function() {
+                const wrapper = document.querySelector('.filter-wrapper');
+                wrapper.classList.toggle('collapsed');
+                this.textContent = wrapper.classList.contains('collapsed') ? '▶' : '◀';
+            });
+
+            document.querySelectorAll('.difficulty-filter').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const difficulty = this.dataset.difficulty;
+                    updateMarkers({ difficulty });
+                });
+            });
+
+            document.getElementById('applyDistance').addEventListener('click', function() {
+                const minDistance = parseFloat(document.getElementById('minDistance').value);
+                const maxDistance = parseFloat(document.getElementById('maxDistance').value);
+                updateMarkers({ minDistance, maxDistance });
+            });
+
+            document.getElementById('familyFriendly').addEventListener('click', function() {
+                this.classList.toggle('active');
+                updateMarkers({ familyFriendly: this.classList.contains('active') });
+            });
+
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                document.getElementById('trailSelect').value = '';
+                document.getElementById('minDistance').value = '';
+                document.getElementById('maxDistance').value = '';
+                document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('familyFriendly').classList.remove('active');
+                
+                updateMarkers();
+                map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
+            });
         });
-    });
-
-    document.getElementById('applyDistance').addEventListener('click', function() {
-        const minDistance = parseFloat(document.getElementById('minDistance').value);
-        const maxDistance = parseFloat(document.getElementById('maxDistance').value);
-        updateMarkers({ minDistance, maxDistance });
-    });
-
-    document.getElementById('familyFriendly').addEventListener('click', function() {
-        this.classList.toggle('active');
-        updateMarkers({ familyFriendly: this.classList.contains('active') });
-    });
-
-    document.getElementById('resetFilters').addEventListener('click', function() {
-        document.getElementById('trailSelect').value = '';
-        document.getElementById('minDistance').value = '';
-        document.getElementById('maxDistance').value = '';
-        document.querySelectorAll('.difficulty-filter').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('familyFriendly').classList.remove('active');
-        
-        updateMarkers();
-        map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
-    });
-});
     </script>
     <script>
         const backToTopButton = document.getElementById('backToTop');
@@ -296,9 +293,16 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         
         backToTopButton.onclick = function() {
-            document.body.scrollTop = 0; // For Safari
-            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         };
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const scatterplotScript = document.createElement('script');
+            scatterplotScript.src = 'scatterplot.js';
+            document.body.appendChild(scatterplotScript);
+        });
     </script>
 </body>
 </html>
