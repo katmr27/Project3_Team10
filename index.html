@@ -7,7 +7,14 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Crimson+Text&display=swap" rel="stylesheet">
+    
+    <!--JavaScript libraries -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="trailsData.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -55,7 +62,125 @@
                     </div>
                     <div class="card-content">
                         <p>There are 3 types of hazards on the trails in the Columbia River Gorge:</p>
-                        <img src="images/hazard_plot.png" alt="Hazard Types Distribution" class="chart-image">
+                        <label for="trailFilter">Select Trail:</label>
+                        <select id="trailFilter">
+                            <option value="all">All</option>
+                        </select>
+                        <canvas id="hazardChart" width="400" height="200"></canvas>
+                        <script>
+                            const filterSelect = document.getElementById('trailFilter');
+                            const ctx = document.getElementById('hazardChart').getContext('2d');
+                            let hazardChart;
+                    
+                            // Function to create or update the chart
+                            const createChart = (data) => {
+                                if (hazardChart) {
+                                    hazardChart.destroy();
+                                }
+                    
+                                console.log('Creating chart with data:', data);
+                                hazardChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: ['Rattlesnakes', 'Ticks', 'Poison Ivy', 'Falling'],
+                                        datasets: [{
+                                            label: 'Number of Trails',
+                                            data: [
+                                                data.rattlesnakes,
+                                                data.ticks,
+                                                data.posionivy,
+                                                data.falling
+                                            ],
+                                            backgroundColor: 'orange'
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            x: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Hazard Type'
+                                                }
+                                            },
+                                            y: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Number of Trails'
+                                                }
+                                            }
+                                        },
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: 'Number of Trails for Each Hazard Type'
+                                            }
+                                        }
+                                    }
+                                });
+                            };
+                    
+                            // Function to update chart data based on the CSV data
+                            const updateChartData = (csvData, selectedTrail) => {
+                                console.log('Updating chart data for trail:', selectedTrail);
+                                const hazardCounts = {
+                                    rattlesnakes: 0,
+                                    ticks: 0,
+                                    posionivy: 0,
+                                    falling: 0
+                                };
+                    
+                                csvData.forEach(row => {
+                                    if (selectedTrail === 'all' || row['Trail Name'] === selectedTrail) {
+                                        hazardCounts.rattlesnakes += parseInt(row.rattlesnakes) || 0;
+                                        hazardCounts.ticks += parseInt(row.ticks) || 0;
+                                        hazardCounts.posionivy += parseInt(row.posionivy) || 0;
+                                        hazardCounts.falling += parseInt(row.falling) || 0;
+                                    }
+                                });
+                    
+                                createChart(hazardCounts);
+                            };
+                    
+                            // Function to populate the dropdown with trail names
+                            const populateDropdown = (csvData) => {
+                                const trails = new Set();
+                                csvData.forEach(row => trails.add(row['trail_name']));
+                                trails.forEach(trail => {
+                                    const option = document.createElement('option');
+                                    option.value = trail;
+                                    option.text = trail;
+                                    filterSelect.appendChild(option);
+                                });
+                            };
+                    
+                            // Fetch and parse the CSV file
+                            fetch('resources/cleaned_data/hazards_data_clean_df.csv')
+                                .then(response => {
+                                    console.log('Fetching CSV data');
+                                    return response.text();
+                                })
+                                .then(csv => Papa.parse(csv, {
+                                    header: true,
+                                    complete: function(result) {
+                                        console.log('CSV data parsed:', result.data);
+                                        populateDropdown(result.data);
+                                        updateChartData(result.data, 'all');
+                                    }
+                                }));
+                    
+                            // Update the chart when the selected trail changes
+                            filterSelect.addEventListener('change', (event) => {
+                                const selectedTrail = event.target.value;
+                                fetch('resources/cleaned_data/hazards_data_clean_df.csv')
+                                    .then(response => response.text())
+                                    .then(csv => Papa.parse(csv, {
+                                        header: true,
+                                        complete: function(result) {
+                                            updateChartData(result.data, selectedTrail);
+                                        }
+                                    }));
+                            });
+                        </script>
                     </div>
                 </div>
 
@@ -80,11 +205,7 @@
 
     <button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
 
-    <!-- Load JavaScript libraries -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="trailsData.js"></script>
-    
+
     <!-- Map initialization -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
