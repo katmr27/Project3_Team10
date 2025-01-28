@@ -49,9 +49,10 @@ In this visualization, a scatterplot was used to chart the relationship between 
 
     • Website Resources
         ○ Outdoor Recreation/Hiking Trails: https://www.kaggle.com/datasets/chuckh193333/hiking-trails-columbia-river-gorge 
+		○ HTML/CSS coding help: https://developer.mozilla.org/en-US/
         ○ Leaflet Library: https://unpkg.com/leaflet@1.7.1/dist/leaflet.js
-	○ PapaParse Library: https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js
- 	○ Plotly Library: https://cdn.plot.ly/plotly-latest.min.js
+		○ PapaParse Library: https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js
+ 		○ Plotly Library: https://cdn.plot.ly/plotly-latest.min.js
         ○ Chart Library: https://cdn.jsdelivr.net/npm/chart.js
 	
 • Additional Support from our tutors, teacher, teaching assistants, Copilot and Claude (for coding corrections and error guidance).
