@@ -1,6 +1,6 @@
 # Finding the Best Family Hiking Trail - Columbia River Gorge Area
 
-# Team Memebers
+# Team Members
 Anya Bocharova,
 Eduardo Camacho,
 Riley Hutchinson,
@@ -17,7 +17,7 @@ This project is an analysis of Hiking Trails near the Columbia River Gorge Regio
 On our dashboard you will find the following:
 
 # Columbia River Gorge Trail Map
-This is a detailed map of the Columbia River Gorge area with visual markers of the geocode locations for the start of each trail in our dataset of hiking trails. The markers are colored based on the diffuclty rating for each trail with red for Diffcult, orange for Moderate, and green for Easy. The map also includes a filter box for multiple Trail Filters that users can use to narrow dowm trails based on trail name, difficulty, distance, and family friendly rating.
+This is a detailed map of the Columbia River Gorge area with visual markers of the geocode locations for the start of each trail in our dataset of hiking trails. The markers are colored based on the diffuclty rating for each trail with red for Diffcult, orange for Moderate, and green for Easy. The map also includes a filter box for multiple Trail Filters that users can use to narrow dowm trails based on trail name, difficulty, distance, and family friendly rating. This map was created using data from the file under the folders resources>cleaned data>all_trails_cleaned_df and the leaflet library for JS. Javascript, HTMl, and CSS coding for this map can be found in the index.html file. 
 
 ![image](https://github.com/user-attachments/assets/39fa4ba9-5c73-4c34-8db7-1d6587738af9)
 
@@ -26,7 +26,22 @@ This is a detailed map of the Columbia River Gorge area with visual markers of t
 # Climbing the Data: The Relationship Between Elevation and Distance
 
 # Tech Stack
-
+	• Python
+	• Jupyter Notebook
+	• MongoDB
+	• HTML
+	• CSS
+	• JavaScript
+	• Pandas
+	• Leaflet.js
+	• PapaParse.min.js
+	• Chart.js
+    • trailsData.js
+       
 # Resources
+• Datasets being used:
+    • Outdoor Recreation/Hiking Trails: Interactive dashboard analyzing popular hiking trails by trail type, difficulty, distance, seasons, or high point.               https://www.kaggle.com/datasets/chuckh193333/hiking-trails-columbia-river-gorge
+• Additonal Support from tutors, teacher, teaching assitants, Copilot and Claude. 
+
 
 # Instructions
