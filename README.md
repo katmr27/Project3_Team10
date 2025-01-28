@@ -45,10 +45,11 @@ This is a detailed map of the Columbia River Gorge area with visual markers of t
    	• trailsData.js
        
 # Resources
+
 • Datasets being used:
 	• Outdoor Recreation/Hiking Trails: Interactive dashboard analyzing popular hiking trails by trail type, difficulty, distance, seasons, or high point.               https://www.kaggle.com/datasets/chuckh193333/hiking-trails-columbia-river-gorge
-Additional Support from tutors, teacher, teaching assistants, Copilot and Claude.
-
+• Additional Support from tutors, teacher, teaching assistants, Copilot and Claude. 
+![image](https://github.com/user-attachments/assets/bfaa9b33-aabe-4e05-acf4-54a843002e03)
 
 
 # Instructions
