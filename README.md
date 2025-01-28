@@ -17,6 +17,9 @@ This project is an analysis of Hiking Trails near the Columbia River Gorge Regio
 On our dashboard you will find the following:
 
 # Columbia River Gorge Trail Map
+This is a detailed map of the Columbia River Gorge area with visual markers of the geocode locations for the start of each trail in our dataset of hiking trails. The markers are colored based on the diffuclty rating for each trail with red for Diffcult, orange for Moderate, and green for Easy. The map also includes a filter box for multiple Trail Filters that users can use to narrow dowm trails based on trail name, difficulty, distance, and family friendly rating.
+
+![image](https://github.com/user-attachments/assets/39fa4ba9-5c73-4c34-8db7-1d6587738af9)
 
 # Nature Bites Back: Ranking Common Hiking Hazards
 
