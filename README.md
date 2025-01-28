@@ -23,7 +23,13 @@ This is a detailed map of the Columbia River Gorge area with visual markers of t
 
 # Nature Bites Back: Ranking Common Hiking Hazards
 
+
+![image](https://github.com/user-attachments/assets/d60a637c-849f-484c-bfe5-96170151c5ea)
+
 # Climbing the Data: The Relationship Between Elevation and Distance
+
+
+![image](https://github.com/user-attachments/assets/bb9ef5fd-0e53-4643-934e-31e8e71aa777)
 
 # Tech Stack
 	• Python
@@ -36,12 +42,13 @@ This is a detailed map of the Columbia River Gorge area with visual markers of t
 	• Leaflet.js
 	• PapaParse.min.js
 	• Chart.js
-    • trailsData.js
+   	• trailsData.js
        
 # Resources
 • Datasets being used:
-    • Outdoor Recreation/Hiking Trails: Interactive dashboard analyzing popular hiking trails by trail type, difficulty, distance, seasons, or high point.               https://www.kaggle.com/datasets/chuckh193333/hiking-trails-columbia-river-gorge
-• Additonal Support from tutors, teacher, teaching assitants, Copilot and Claude. 
+	• Outdoor Recreation/Hiking Trails: Interactive dashboard analyzing popular hiking trails by trail type, difficulty, distance, seasons, or high point.               https://www.kaggle.com/datasets/chuckh193333/hiking-trails-columbia-river-gorge
+Additional Support from tutors, teacher, teaching assistants, Copilot and Claude.
+
 
 
 # Instructions
