@@ -58,6 +58,19 @@ In this visualization, a scatterplot was used to chart the relationship between 
 
 # Considerations
 
-Review Async PDFs to write this paragraph, algorhythmic bias(data bias where did the data comefrom any limitations)
+
+Our team acknowledges several important data ethics considerations for this project:
+
+1. Data Collection Bias: The trail data was sourced from user-contributed information and we have found inaccuracies in the data provided. We did our best to manually correct the geo data to more accurately reflect the correct location of trails.
+
+2. Accessibility Representation: Our "family-friendly" classification is subjective and may not adequately represent the needs of all families, particularly those with members who have different mobility requirements or accessibility needs. While we include elevation and distance metrics, other important accessibility factors might not be captured in our dataset.
+
+3. Hazard Reporting Limitations: The hazard data (rattlesnakes, ticks, poison ivy, falling) relies on reported incidents and may not reflect the actual risk levels. Some hazards might be underreported in less frequented trails or overreported in more popular ones. Additionally, the binary nature of our hazard indicators (present/not present) doesn't capture the severity or seasonality of these risks.
+
+4. Geographic and Temporal Limitations: Our dataset focuses specifically on the Columbia River Gorge region and may not be representative of other hiking areas. Additionally, trail conditions can change seasonally and over time, so the accuracy of the data may vary depending on when it was last updated.
+
+5. Cultural Considerations: Some trails in our dataset may have cultural or historical significance to local Indigenous communities. While we provide location data and trail descriptions, we acknowledge that this information should be used respectfully and in accordance with any local guidelines or restrictions.
+
+These considerations should be kept in mind when using our dashboard for trail selection and planning purposes.
 
 # Instructions
