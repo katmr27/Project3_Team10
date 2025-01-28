@@ -19,7 +19,7 @@
                 <li><a href="#dashboard">Dashboard</a></li>
                 <li><a href="#trailMap">Map</a></li>
                 <li><a href="#hazards">Hazards</a></li>
-                <li><a href="#seasonal">Seasonal Conditioins</a></li>
+                <li><a href="#seasonal">Distance vs. Elevation</a></li>
             </ul>
         </nav>
     </header>
@@ -75,7 +75,7 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2025 Data Analysis Dashboard</p>
+        <p>&copy; 2025 Finding the Best Family Hiking Trail</p>
     </footer>
 
     <button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
@@ -105,7 +105,7 @@
 
             const markers = {};
             const MAX_DISTANCE_METERS = 50000;
-            const centerPoint = L.latLng(45.56058, -122.17239);
+            const centerPoint = L.latLng(45.7087, -121.7525);
 
             function initializeMarkers() {
                 trailsData.forEach(trail => {
