@@ -130,7 +130,7 @@
                                 };
                     
                                 csvData.forEach(row => {
-                                    if (selectedTrail === 'all' || row['Trail Name'] === selectedTrail) {
+                                    if (selectedTrail === 'all' || row['trail_name'] === selectedTrail) {
                                         hazardCounts.rattlesnakes += parseInt(row.rattlesnakes) || 0;
                                         hazardCounts.ticks += parseInt(row.ticks) || 0;
                                         hazardCounts.posionivy += parseInt(row.posionivy) || 0;
