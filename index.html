@@ -413,7 +413,7 @@
         const maxDistance = parseFloat(document.getElementById('maxDistance').value) || Infinity;
         updateMarkers({ minDistance, maxDistance });
     });
-    
+
     document.getElementById('resetFilters').addEventListener('click', function() {
         document.getElementById('trailSelect').value = '';
         document.getElementById('minDistance').value = '';
@@ -425,6 +425,25 @@
         map.fitBounds(L.latLngBounds(Object.values(markers).map(m => m.getLatLng())));
     });
 });
+    </script>
+    <script>
+        // Back to Top button functionality
+        const backToTopButton = document.getElementById('backToTop');
+
+        // Show button when user scrolls down 100px from the top
+        window.onscroll = function() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        };
+
+        // Scroll to top when button is clicked
+        backToTopButton.addEventListener('click', function() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        });
     </script>
 </body>
 </html>
