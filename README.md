@@ -17,17 +17,17 @@ This project is an analysis of Hiking Trails near the Columbia River Gorge Regio
 On our dashboard you will find the following:
 
 # Columbia River Gorge Trail Map
-This is a detailed map of the Columbia River Gorge area with visual markers of the geocode locations for the start of each trail in our dataset of hiking trails. The markers are colored based on the diffuclty rating for each trail with red for Diffcult, orange for Moderate, and green for Easy. The map also includes a filter box for multiple Trail Filters that users can use to narrow dowm trails based on trail name, difficulty, distance, and family friendly rating. This map was created using data from the file under the folders resources>cleaned data>all_trails_cleaned_df and the leaflet library for JS. Javascript, HTML, and CSS coding for this map can be found in the index.html file. 
+This is a detailed map of the Columbia River Gorge area with visual markers of the geocode locations for the start of each trail in our dataset of hiking trails. The markers are colored based on the difficulty rating for each trail with red for Difficult, orange for Moderate, and green for Easy. The map also includes a filter box for multiple Trail Filters that users can use to narrow down trails based on hiking trail name, difficulty, distance, and family friendly rating. This map was created using data from the file under the folders resources>cleaned data>all_trails_cleaned_df and the leaflet library for JS. Javascript, HTML, and CSS coding for this map can be found in the index.html file.
 
 ![image](https://github.com/user-attachments/assets/39fa4ba9-5c73-4c34-8db7-1d6587738af9)
 
 # Nature Bites Back: Ranking Common Hiking Hazards
-Four common hazards found amongst most trails (Rattlesnakes, Ticks, Poison Ivy, and Falling) are included in the data details for the list of trails for the Columbia River Gorge region. This data was cleaned and used to create a bar chart that details the number of trails for each type of hazard. A lable with the trail count displays when the user hovers each column. A filter was added to the chart for allowing users to select a specific trail name and update the number of hazards based on the trail data. With this data we found Poison Ivy to be the most common trail hazard with 44 trails and Falling the least common trail hazard at 0. The code for this visualization was created using two new libraries Papaparse.min.js and Chart.js, to read and chart the data found in resources>cleaned_data>hazards_data_clean_df.csv.
+Four common hazards found amongst most trails (Rattlesnakes, Ticks, Poison Ivy, and Falling) are included in the data details for the list of trails for the Columbia River Gorge region. This data was cleaned and used to create a bar chart that details the number of trails for each type of hazard. A label with the trail count displays when the user hovers each column. A filter was added to the chart for allowing users to select a specific trail name and update the number of hazards based on the trail data. With this data we found Poison Ivy to be the most common trail hazard with 44 trails and Falling the least common trail hazard at 0. The code for this visualization was created using two new libraries Papaparse.min.js and Chart.js, to read and chart the data found in resources>cleaned_data>hazards_data_clean_df.csv.
 
 ![image](https://github.com/user-attachments/assets/d60a637c-849f-484c-bfe5-96170151c5ea)
 
 # Climbing the Data: The Relationship Between Elevation and Distance
-In this visualization, a scatterplot was used to chart the relationship between the distance and elevation of each trail. This data can be used in relation to the hazard and map visualization to narrow down the best suited trail based on the user's distance and elevation needs. The majority of trails from our dataset were found to fall under the  miles mark for distance and under 1500 feet of elevation. A lable with the trail name for each plot generates when a user hovers over a specific plot point. A colored heatmap was also used to display the gradual change as plot points increased in elevation. The code for this viuslization was created using mostly Javascript and a new library Papaparse.min.js to create the visualization and read the data found in resources>cleaned_data>Family_data_ElevationVsDistance.csv.
+In this visualization, a scatterplot was used to chart the relationship between the distance and elevation of each trail. This data can be used in relation to the hazard and map visualization to narrow down the best suited trail based on the user's distance and elevation needs. The majority of trails from our dataset were found to fall under the  miles mark for distance and under 1500 feet of elevation. A label with the trail name for each plot generates when a user hovers over a specific plot point. A colored heatmap was also used to display the gradual change as plot points increased in elevation. The code for this visualization was created using mostly Javascript and a new library Papaparse.min.js to create the visualization and read the data found in resources>cleaned_data>Family_data_ElevationVsDistance.csv.
 
 ![image](https://github.com/user-attachments/assets/bb9ef5fd-0e53-4643-934e-31e8e71aa777)
 
@@ -70,8 +70,13 @@ Our team acknowledges several important data ethics considerations for this proj
 
 4. Geographic and Temporal Limitations: Our dataset focuses specifically on the Columbia River Gorge region and may not be representative of other hiking areas. Additionally, trail conditions can change seasonally and over time, so the accuracy of the data may vary depending on when it was last updated.
 
-5. Cultural Considerations: Some trails in our dataset may have cultural or historical significance to local Indigenous communities. While we provide location data and trail descriptions, we acknowledge that this information should be used respectfully and in accordance with any local guidelines or restrictions.
-
 These considerations should be kept in mind when using our dashboard for trail selection and planning purposes.
 
 # Instructions
+• Clone the Repo
+• Pull latest version of main
+• Download libraries listed above in Tech Stack
+• Install Go Live extension in VS Code
+• Open folder in VS code
+• Open file index.html 
+• At the bottom right corner click Go Live to launch site
