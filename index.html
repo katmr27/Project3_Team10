@@ -199,7 +199,6 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2025 Finding the Best Family Hiking Trail</p>
     </footer>
 
     <button id="backToTop" class="back-to-top" title="Back to Top">↑</button>
@@ -403,6 +402,18 @@
         });
     });
 
+    document.getElementById('familyFriendly').addEventListener('click', function() {
+        this.classList.toggle('active');
+        const isActive = this.classList.contains('active');
+        updateMarkers({ familyFriendly: isActive });
+    });
+
+    document.getElementById('applyDistance').addEventListener('click', function() {
+        const minDistance = parseFloat(document.getElementById('minDistance').value) || 0;
+        const maxDistance = parseFloat(document.getElementById('maxDistance').value) || Infinity;
+        updateMarkers({ minDistance, maxDistance });
+    });
+    
     document.getElementById('resetFilters').addEventListener('click', function() {
         document.getElementById('trailSelect').value = '';
         document.getElementById('minDistance').value = '';
