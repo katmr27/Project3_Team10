@@ -70,8 +70,6 @@ Our team acknowledges several important data ethics considerations for this proj
 
 4. Geographic and Temporal Limitations: Our dataset focuses specifically on the Columbia River Gorge region and may not be representative of other hiking areas. Additionally, trail conditions can change seasonally and over time, so the accuracy of the data may vary depending on when it was last updated.
 
-5. Cultural Considerations: Some trails in our dataset may have cultural or historical significance to local Indigenous communities. While we provide location data and trail descriptions, we acknowledge that this information should be used respectfully and in accordance with any local guidelines or restrictions.
-
 These considerations should be kept in mind when using our dashboard for trail selection and planning purposes.
 
 # Instructions
