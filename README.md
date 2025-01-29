@@ -73,10 +73,11 @@ Our team acknowledges several important data ethics considerations for this proj
 These considerations should be kept in mind when using our dashboard for trail selection and planning purposes.
 
 # Instructions
-• Clone the Repo
-• Pull latest version of main
-• Download libraries listed above in Tech Stack
-• Install Go Live extension in VS Code
-• Open folder in VS code
-• Open file index.html 
-• At the bottom right corner click Go Live to launch site
+
+	• Clone the Repo
+	• Pull latest version of main
+	• Download libraries listed above in Tech Stack
+	• Install Go Live extension in VS Code
+	• Open folder in VS code
+	• Open file index.html 
+	• At the bottom right corner click Go Live to launch site
